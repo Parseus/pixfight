@@ -3,11 +3,6 @@ package com.noclip.marcinmalysz.pixfight;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +10,12 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
 
@@ -39,7 +40,7 @@ public class PFLoadGameFragment extends Fragment {
         tableView = getView().findViewById(R.id.saveFilesTable);
 
         Button backButton = getView().findViewById(R.id.loadgame_back);
-        backButton.setOnClickListener(arg0 -> getFragmentManager().popBackStack());
+        backButton.setOnClickListener(arg0 -> getParentFragmentManager().popBackStack());
 
         loadButton = getView().findViewById(R.id.loadgamebuttonstart);
         loadButton.setOnClickListener(arg0 -> loadGame());
@@ -70,7 +71,7 @@ public class PFLoadGameFragment extends Fragment {
         PFRenderFragment renderFragment = new PFRenderFragment();
         renderFragment.setArguments(bundle);
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, renderFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -138,10 +139,10 @@ public class PFLoadGameFragment extends Fragment {
 
         selectedFile = 0;
         View row = tableView.getChildAt(0);
-        row.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rowSelected));
+        row.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.rowSelected));
     }
 
-    private View.OnClickListener tablerowOnClickListener = v -> {
+    private final View.OnClickListener tablerowOnClickListener = v -> {
 
         for (int i = 0; i < tableView.getChildCount(); ++i) {
 
@@ -149,11 +150,11 @@ public class PFLoadGameFragment extends Fragment {
 
             if (row.equals(v)) {
 
-                row.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rowSelected));
+                row.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.rowSelected));
             }
             else {
 
-                row.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.transparent));
+                row.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.transparent));
             }
         }
 

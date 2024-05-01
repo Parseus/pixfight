@@ -1,13 +1,6 @@
 package com.noclip.marcinmalysz.pixfight;
 
 import android.os.Bundle;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class PFMakeRoomFragment extends Fragment {
     private Button mapButton = null;
     private TextView infoLabel = null;
     private ImageView mapImage = null;
-    private SparseArray<Map<String, String>> data = new SparseArray<>();
+    private final SparseArray<Map<String, String>> data = new SparseArray<>();
 
     private static PFMakeRoomFragment staticInstance = null;
 
@@ -41,7 +42,7 @@ public class PFMakeRoomFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        isMaster = getArguments().getBoolean("master");
+        isMaster = requireArguments().getBoolean("master");
 
         //data
         setupData();
@@ -59,7 +60,7 @@ public class PFMakeRoomFragment extends Fragment {
                 leaveRoom();
             }
 
-            getFragmentManager().popBackStack();
+            getParentFragmentManager().popBackStack();
         });
 
         mapButton = getView().findViewById(R.id.choosemap);
@@ -158,7 +159,7 @@ public class PFMakeRoomFragment extends Fragment {
         mapButton.setText(mapInfo.get("name"));
 
         String resourceString = mapInfo.get("image");
-        mapImage.setImageDrawable(ContextCompat.getDrawable(getContext(), getId(resourceString, R.drawable.class)));
+        mapImage.setImageDrawable(AppCompatResources.getDrawable(requireContext(), getId(resourceString, R.drawable.class)));
 
         updateRoomInfo(mapInfo.get("mapname"), Integer.parseInt(mapInfo.get("players")));
 
@@ -204,7 +205,7 @@ public class PFMakeRoomFragment extends Fragment {
 
     private void startGame(int playerID, int players, String mapname) {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             Bundle bundle = new Bundle();
             bundle.putInt("playerID", playerID);
@@ -214,7 +215,7 @@ public class PFMakeRoomFragment extends Fragment {
             PFRenderFragment renderFragment = new PFRenderFragment();
             renderFragment.setArguments(bundle);
 
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragmentContainer, renderFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
@@ -223,7 +224,7 @@ public class PFMakeRoomFragment extends Fragment {
 
     private void updateInteface(String mapname) {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             for (int i = 0; i < data.size(); ++i) {
 
@@ -234,7 +235,7 @@ public class PFMakeRoomFragment extends Fragment {
                     mapButton.setText(mapInfo.get("name"));
 
                     String resourceString = mapInfo.get("image");
-                    mapImage.setImageDrawable(ContextCompat.getDrawable(getContext(), getId(resourceString, R.drawable.class)));
+                    mapImage.setImageDrawable(AppCompatResources.getDrawable(requireContext(), getId(resourceString, R.drawable.class)));
 
                     break;
                 }

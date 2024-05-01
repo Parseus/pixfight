@@ -1,12 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
 
 android {
     namespace 'com.noclip.marcinmalysz.pixfight'
-    compileSdk 27
+    compileSdk 34
     defaultConfig {
         applicationId "com.noclip.marcinmalysz.pixfight"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 34
         versionCode 3
         versionName "1.2"
         externalNativeBuild {
@@ -50,10 +53,9 @@ android {
 
 dependencies {
     implementation files('../FMOD/lib/fmod.jar')
-    implementation('com.android.support:appcompat-v7:27.1.1') {
-        exclude module: 'support-v4'
-    }
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:support-fragment:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.fragment:fragment-ktx:1.7.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

@@ -1,12 +1,13 @@
 package com.noclip.marcinmalysz.pixfight;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
-import android.support.v7.app.AppCompatDialog;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AppCompatDialog;
 
 public class ProgressDialog extends AppCompatDialog {
 
@@ -32,8 +33,7 @@ public class ProgressDialog extends AppCompatDialog {
         if (window != null) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             window.setDimAmount(0.5f);
+            setOnDismissListener(dialog -> window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND));
         }
-
-        setOnDismissListener(dialog -> window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND));
     }
 }

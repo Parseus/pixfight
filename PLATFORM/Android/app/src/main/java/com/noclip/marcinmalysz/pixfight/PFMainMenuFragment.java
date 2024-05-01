@@ -1,17 +1,18 @@
 package com.noclip.marcinmalysz.pixfight;
 
 import android.os.Bundle;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class PFMainMenuFragment extends Fragment {
 
@@ -44,9 +45,9 @@ public class PFMainMenuFragment extends Fragment {
 
     private void disconnectPopToRoot() {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getParentFragmentManager();
             int count = fm.getBackStackEntryCount();
             for(int i = 0; i < count; ++i) {
                 fm.popBackStackImmediate();
@@ -55,7 +56,7 @@ public class PFMainMenuFragment extends Fragment {
             int duration = Toast.LENGTH_SHORT;
             CharSequence textFinish = "You have been disconnected.";
 
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), textFinish, duration);
+            Toast toast = Toast.makeText(requireContext(), textFinish, duration);
             toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
             toast.show();
         });
@@ -63,7 +64,7 @@ public class PFMainMenuFragment extends Fragment {
 
     private void goToFragment(Fragment fragment) {
         PFAudioWrapper.playSelectSound();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

@@ -4,10 +4,11 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -24,7 +25,7 @@ interface PFSetupCallback {
  */
 public class PFGL2View extends GLSurfaceView {
 
-    private static String TAG = "GL2JNIView";
+    private static final String TAG = "GL2JNIView";
     private static final boolean DEBUG = false;
 
     @Nullable
@@ -88,7 +89,7 @@ public class PFGL2View extends GLSurfaceView {
     }
 
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
-        private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+        private static final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
         public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
             Log.w(TAG, "creating OpenGL ES 2.0 context");
             checkEglError("Before eglCreateContext", egl);
@@ -125,8 +126,8 @@ public class PFGL2View extends GLSurfaceView {
          * We use a minimum size of 4 bits for red/green/blue, but will
          * perform actual matching in chooseConfig() below.
          */
-        private static int EGL_OPENGL_ES2_BIT = 4;
-        private static int[] s_configAttribs2 =
+        private static final int EGL_OPENGL_ES2_BIT = 4;
+        private static final int[] s_configAttribs2 =
                 {
                         EGL10.EGL_RED_SIZE, 4,
                         EGL10.EGL_GREEN_SIZE, 4,
@@ -300,7 +301,7 @@ public class PFGL2View extends GLSurfaceView {
         int mAlphaSize;
         int mDepthSize;
         int mStencilSize;
-        private int[] mValue = new int[1];
+        private final int[] mValue = new int[1];
     }
 
     private static class Renderer implements GLSurfaceView.Renderer {

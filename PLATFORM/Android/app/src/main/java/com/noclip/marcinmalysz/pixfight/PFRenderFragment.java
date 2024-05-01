@@ -6,12 +6,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -28,6 +22,13 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -86,12 +87,12 @@ public class PFRenderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        glView = new PFGL2View(getActivity());
+        glView = new PFGL2View(requireContext());
         glView.setPreserveEGLContextOnPause(true);
 
         isMultiplayer = isMultiplayerMode();
 
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Display display = requireActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getRealSize(size);
         int widthPixels = size.x;
@@ -125,7 +126,7 @@ public class PFRenderFragment extends Fragment {
 
         multiplyButton.setOnClickListener(arg0 -> {
 
-            String timeText = "X" + Integer.toString(multiplyTime());
+            String timeText = "X" + multiplyTime();
             multiplyButton.setText(timeText);
         });
 
@@ -172,7 +173,7 @@ public class PFRenderFragment extends Fragment {
 
     public void updateMultiplayerState(boolean unlock) {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             allowInteraction = unlock;
 
@@ -184,7 +185,7 @@ public class PFRenderFragment extends Fragment {
 
     public void updatePlayerTurn() {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             CharSequence text = "Your turn!";
             int duration = Toast.LENGTH_SHORT;
@@ -196,14 +197,14 @@ public class PFRenderFragment extends Fragment {
 
     public void multiplayeEndGame(int winnerID) {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             final String[] items = {
                     "OK"
             };
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Game finished, player " + Integer.toString(winnerID) + " win!");
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Game finished, player " + winnerID + " win!");
             builder.setCancelable(true);
 
             builder.setItems(items, (dialogInterface, i) -> {});
@@ -217,7 +218,7 @@ public class PFRenderFragment extends Fragment {
 
         isAlreadyInGame = false;
         PFAudioWrapper.playMenuMusic();
-        getFragmentManager().popBackStack();
+        getParentFragmentManager().popBackStack();
     }
 
     public void buildMainMenu() {
@@ -234,7 +235,7 @@ public class PFRenderFragment extends Fragment {
                 "SAVE"
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("MENU");
         builder.setCancelable(true);
 
@@ -287,9 +288,9 @@ public class PFRenderFragment extends Fragment {
         String dateString = sdf.format(currentTime);
         String mapString = getMapName();
 
-        String savePath = dir.toString() + "/" + mapString + "_" + dateString + ".sav";
+        String savePath = dir + "/" + mapString + "_" + dateString + ".sav";
 
-        CharSequence text = null;
+        CharSequence text;
 
         if (saveGame(savePath)) {
 
@@ -309,7 +310,7 @@ public class PFRenderFragment extends Fragment {
 
         Log.d("[PIXFIGHT]", "onWinEvent");
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             CharSequence text = "Congratulations, You win!";
             int duration = Toast.LENGTH_SHORT;
@@ -323,7 +324,7 @@ public class PFRenderFragment extends Fragment {
 
         Log.d("[PIXFIGHT]", "onLoseEvent");
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             CharSequence text = "Sorry, You lose!";
             int duration = Toast.LENGTH_SHORT;
@@ -337,14 +338,14 @@ public class PFRenderFragment extends Fragment {
 
         Log.d("[PIXFIGHT]", "botsStartThinkEvent");
 
-        getActivity().runOnUiThread(() -> progressDialog.show());
+        requireActivity().runOnUiThread(() -> progressDialog.show());
     }
 
     public void botsEndThinkEvent() {
 
         Log.d("[PIXFIGHT]", "botsEndThinkEvent");
 
-        getActivity().runOnUiThread(() -> progressDialog.hide());
+        requireActivity().runOnUiThread(() -> progressDialog.hide());
     }
 
     private void buildDialog(final int teamID, final int cash) {
@@ -437,8 +438,8 @@ public class PFRenderFragment extends Fragment {
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Build Unit - Cash: " + Integer.toString(cash));
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Build Unit - Cash: " + cash);
         builder.setCancelable(true);
         builder.setAdapter(adapter, (dialog, which) -> {
 
@@ -460,14 +461,14 @@ public class PFRenderFragment extends Fragment {
 
     public void onBaseSelected(final int team, final int cash) {
 
-        getActivity().runOnUiThread(() -> buildDialog(team, cash));
+        requireActivity().runOnUiThread(() -> buildDialog(team, cash));
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        PFGameLib.nativeOnStart(getActivity());
+        PFGameLib.nativeOnStart(requireActivity());
         PFAudioWrapper.playGameMusic();
     }
 
@@ -510,7 +511,7 @@ public class PFRenderFragment extends Fragment {
         }
     }
 
-    private class PFPanGestureListener
+    private static class PFPanGestureListener
             extends GestureDetector.SimpleOnGestureListener {
 
         @Override

@@ -1,14 +1,11 @@
 package com.noclip.marcinmalysz.pixfight;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 class PFImmersiveMode {
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     static void SetImmersiveMode(final Window window) {
 
         window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);

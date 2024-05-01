@@ -1,7 +1,8 @@
 package com.noclip.marcinmalysz.pixfight;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by marcinmalysz on 13/02/2018.

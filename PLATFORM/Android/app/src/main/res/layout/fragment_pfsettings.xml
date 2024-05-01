@@ -12,11 +12,11 @@
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:adjustViewBounds="false"
-            android:contentDescription="background"
+            android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio=""
@@ -48,7 +48,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/back2x" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/mute_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.45" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/ai_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,5 +76,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.55" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

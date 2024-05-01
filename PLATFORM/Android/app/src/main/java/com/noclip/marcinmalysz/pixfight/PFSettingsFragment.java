@@ -3,20 +3,21 @@ package com.noclip.marcinmalysz.pixfight;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Switch;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.Fragment;
 
 public class PFSettingsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
-    private Switch aiSwitch = null;
-    private Switch muteSwitch = null;
+    private SwitchCompat aiSwitch = null;
+    private SwitchCompat muteSwitch = null;
     private SharedPreferences preferences = null;
 
     @Nullable
@@ -28,9 +29,9 @@ public class PFSettingsFragment extends Fragment implements CompoundButton.OnChe
         aiSwitch = layout.findViewById(R.id.ai_switch);
 
         View backButton = layout.findViewById(R.id.settings_back);
-        backButton.setOnClickListener(v -> getFragmentManager().popBackStack());
+        backButton.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
-        preferences = getContext().getSharedPreferences("PixFightPreferences", Context.MODE_PRIVATE);
+        preferences = requireContext().getSharedPreferences("PixFightPreferences", Context.MODE_PRIVATE);
 
         muteSwitch.setChecked(preferences.getBoolean("mute", false));
         aiSwitch.setChecked(preferences.getBoolean("hardai", false));

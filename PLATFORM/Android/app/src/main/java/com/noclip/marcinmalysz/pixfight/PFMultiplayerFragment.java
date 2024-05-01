@@ -1,11 +1,6 @@
 package com.noclip.marcinmalysz.pixfight;
 
 import android.os.Bundle;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +9,11 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class PFMultiplayerFragment extends Fragment {
 
@@ -35,7 +35,7 @@ public class PFMultiplayerFragment extends Fragment {
 
         //back
         Button backButton = getView().findViewById(R.id.multibutton_back);
-        backButton.setOnClickListener(arg0 -> getFragmentManager().popBackStack());
+        backButton.setOnClickListener(arg0 -> getParentFragmentManager().popBackStack());
 
         makeRoomButton = getView().findViewById(R.id.imageButtonMakeRoom);
         joinRoomButton = getView().findViewById(R.id.imageButtonJoinRoom);
@@ -60,16 +60,16 @@ public class PFMultiplayerFragment extends Fragment {
 
         connected = connectToServer();
 
-        if (connected == false) {
+        if (!connected) {
 
             int duration = Toast.LENGTH_SHORT;
             CharSequence textFinish = "Could not connect to server, please try again.";
 
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), textFinish, duration);
+            Toast toast = Toast.makeText(requireContext(), textFinish, duration);
             toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
             toast.show();
 
-            getFragmentManager().popBackStack();
+            getParentFragmentManager().popBackStack();
 
             return;
         }
@@ -94,7 +94,7 @@ public class PFMultiplayerFragment extends Fragment {
 
     private void navigateToRoom() {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             Bundle bundle = new Bundle();
             bundle.putBoolean("master", true);
@@ -122,7 +122,7 @@ public class PFMultiplayerFragment extends Fragment {
 
     private void goToFragment(Fragment fragment) {
         PFAudioWrapper.playSelectSound();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

@@ -2,12 +2,6 @@ package com.noclip.marcinmalysz.pixfight;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Keep;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -20,6 +14,13 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class PFJoinRoomFragment extends Fragment {
 
@@ -45,7 +46,7 @@ public class PFJoinRoomFragment extends Fragment {
 
         //back
         Button backButton = getView().findViewById(R.id.joinbutton_back);
-        backButton.setOnClickListener(arg0 -> getFragmentManager().popBackStack());
+        backButton.setOnClickListener(arg0 -> getParentFragmentManager().popBackStack());
 
         joinButton = getView().findViewById(R.id.joinbutton);
         refreshButton = getView().findViewById(R.id.refreshbutton);
@@ -66,7 +67,7 @@ public class PFJoinRoomFragment extends Fragment {
                 PFMakeRoomFragment roomFragment = new PFMakeRoomFragment();
                 roomFragment.setArguments(bundle);
 
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentContainer, roomFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -77,11 +78,11 @@ public class PFJoinRoomFragment extends Fragment {
             int duration = Toast.LENGTH_SHORT;
             CharSequence textFinish = "Could not connect to room.";
 
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), textFinish, duration);
+            Toast toast = Toast.makeText(requireContext(), textFinish, duration);
             toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
             toast.show();
 
-            getFragmentManager().popBackStack();
+            getParentFragmentManager().popBackStack();
         });
 
         refreshButton.setOnClickListener(arg0 -> {
@@ -128,7 +129,7 @@ public class PFJoinRoomFragment extends Fragment {
 
     void buildTableView(String[] rooms, int[] ports) {
 
-        getActivity().runOnUiThread(() -> {
+        requireActivity().runOnUiThread(() -> {
 
             roomStrings = rooms;
             roomPorts = ports;
@@ -165,7 +166,7 @@ public class PFJoinRoomFragment extends Fragment {
         });
     }
 
-    private View.OnClickListener tablerowOnClickListener = v -> {
+    private final View.OnClickListener tablerowOnClickListener = v -> {
 
         for (int i = 0; i < tableView.getChildCount(); ++i) {
 
@@ -173,11 +174,11 @@ public class PFJoinRoomFragment extends Fragment {
 
             if (row.equals(v)) {
 
-                row.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rowSelected));
+                row.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.rowSelected));
             }
             else {
 
-                row.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.transparent));
+                row.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.transparent));
             }
         }
 
