@@ -1,21 +1,15 @@
 package com.noclip.marcinmalysz.pixfight;
 
-import android.Manifest;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,7 +26,6 @@ public class PFActivity extends AppCompatActivity {
         System.loadLibrary("native-lib");
     }
 
-    private static final int WRITE_STORAGEREQUESTCODE = 1337; //This should be unique somehow
     private boolean audioInitialized = false;
 
     @Override
@@ -46,12 +39,6 @@ public class PFActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         PFImmersiveMode.SetImmersiveMode(getWindow());
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGEREQUESTCODE);
-            return;
-        }
-
         preapreForCopy();
     }
 
@@ -64,25 +51,11 @@ public class PFActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == WRITE_STORAGEREQUESTCODE) {
-
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                preapreForCopy();
-            }
-        }
-    }
-
     private void preapreForCopy() {
 
-        Log.d("[STORAGE]", Environment.getExternalStorageDirectory().toString());
+        Log.d("[STORAGE]", getFilesDir().toString());
 
-        //TOOD: dodac plik .nomedia przy kopiowaniu
-        File dir = new File(Environment.getExternalStorageDirectory(), "PIXFIGHTDATA");
+        File dir = new File(getFilesDir(), "PIXFIGHTDATA");
 
         if(!dir.exists()) {
 
@@ -92,15 +65,14 @@ public class PFActivity extends AppCompatActivity {
                 copyAssets();
             }
             else {
-
-                CharSequence text = "Please enable external storage access for game";
+                String text = "COULD NOT CREATE DIRECTORY FOR ASSETS";
                 int duration = Toast.LENGTH_LONG;
 
-                Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+                Toast toast = Toast.makeText(this, text, duration);
                 toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
                 toast.show();
 
-                Log.d("[ERROR]", "COULD NOT CREATE DIRECTORY FOR ASSETS");
+                Log.d("[ERROR]", text);
             }
         }
         else {
@@ -108,7 +80,7 @@ public class PFActivity extends AppCompatActivity {
             Log.d("[INFO]", "DIRECTORY ALREADY EXIST");
         }
 
-        String noMediaLocation = Environment.getExternalStorageDirectory().toString() + "/PIXFIGHTDATA/.nomedia";
+        String noMediaLocation = getFilesDir().toString() + "/PIXFIGHTDATA/.nomedia";
         File noMediaFile = new File(noMediaLocation);
 
         if (!noMediaFile.exists()) {
@@ -144,10 +116,10 @@ public class PFActivity extends AppCompatActivity {
 
     private void copyAssets() {
 
-        CharSequence text = "COPING ASSETS...";
+        CharSequence text = "COPYING ASSETS...";
         int duration = Toast.LENGTH_SHORT;
 
-        Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+        Toast toast = Toast.makeText(this, text, duration);
         toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
         toast.show();
 
@@ -174,7 +146,7 @@ public class PFActivity extends AppCompatActivity {
                     continue;
                 }
 
-                File outFile = new File(Environment.getExternalStorageDirectory() + "/PIXFIGHTDATA/", filename);
+                File outFile = new File(getFilesDir() + "/PIXFIGHTDATA/", filename);
                 try (InputStream in = assetManager.open(filename); OutputStream out = new FileOutputStream(outFile)) {
 
                     copyFile(in, out);
@@ -186,13 +158,13 @@ public class PFActivity extends AppCompatActivity {
             }
         }
 
-        CharSequence textFinish = "COPING ASSETS FINISHED.";
+        CharSequence textFinish = "COPYING ASSETS FINISHED.";
 
-        toast = Toast.makeText(getApplicationContext(), textFinish, duration);
+        toast = Toast.makeText(this, textFinish, duration);
         toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
         toast.show();
 
-        Log.d("[INFO]", "COPING ASSETS FINISHED.");
+        Log.d("[INFO]", "COPYING ASSETS FINISHED.");
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.noclip.marcinmalysz.pixfight;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public class PFLoadGameFragment extends Fragment {
             return;
         }
 
-        File dir = new File(Environment.getExternalStorageDirectory() + "/PIXFIGHTDATA", "save");
+        File dir = new File(requireContext().getFilesDir() + "/PIXFIGHTDATA", "save");
         File fileToLoad = files[selectedFile];
         File fullPath = new File(dir, fileToLoad.getName());
 
@@ -83,7 +82,7 @@ public class PFLoadGameFragment extends Fragment {
             return;
         }
 
-        File dir = new File(Environment.getExternalStorageDirectory() + "/PIXFIGHTDATA", "save");
+        File dir = new File(requireContext().getFilesDir() + "/PIXFIGHTDATA", "save");
         File fileToDelete = files[selectedFile];
 
         File fullPath = new File(dir, fileToDelete.getName());
@@ -97,7 +96,7 @@ public class PFLoadGameFragment extends Fragment {
 
     private void loadSaveFiles() {
 
-        File dir = new File(Environment.getExternalStorageDirectory() + "/PIXFIGHTDATA", "save");
+        File dir = new File(requireContext().getFilesDir() + "/PIXFIGHTDATA", "save");
 
         if (!dir.exists()) {
             loadButton.setEnabled(false);

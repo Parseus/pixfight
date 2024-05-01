@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -263,7 +262,7 @@ public class PFRenderFragment extends Fragment {
 
     public void saveCurrentGame() {
 
-        File dir = new File(Environment.getExternalStorageDirectory() + "/PIXFIGHTDATA", "save");
+        File dir = new File(requireContext().getFilesDir() + "/PIXFIGHTDATA", "save");
 
         if (!dir.exists()) {
             dir.mkdir();
