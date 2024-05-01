@@ -23,6 +23,7 @@ PLATFORM/macOS/PixFight.xcodeproj/project.xcworkspace/xcuserdata/
 
 #android
 PLATFORM/Android/build
+PLATFORM/Android/app/.cxx
 PLATFORM/Android/app/build
 PLATFORM/Android/app/release/
 PLATFORM/Android/.idea/caches/

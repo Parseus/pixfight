@@ -19,7 +19,7 @@
 #define __has_extension __has_feature // Compatibility with pre-3.0 compilers.
 #endif
 
-#if (__cplusplus && __cplusplus >= 201103L && (__has_extension(cxx_strong_enums) || __has_feature(objc_fixed_enum))) || (!__cplusplus && __has_feature(objc_fixed_enum))
+#if (!__ANDROID__ && __cplusplus && __cplusplus >= 201103L && (__has_extension(cxx_strong_enums) || __has_feature(objc_fixed_enum))) || (!__cplusplus && __has_feature(objc_fixed_enum))
 #define PF_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
 #if (__cplusplus)
 #define PF_OPTIONS(_type, _name) _type _name; enum : _type
